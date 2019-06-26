@@ -196,6 +196,34 @@ def get_branch_details(current_user,name,city,limit,offset):
     #return str(len(mni))
     return jsonify({'result':output})
 
+@app.route('/bank/<name>/<city>',methods=['GET'])
+@token_required
+def get_branch_details_wolo(current_user,name,city):
+    bank_details = Banks.query.filter_by(name=name).first()
+    if not bank_details:
+        return jsonify({'messege':'Bank Not Found'})  #all names are unique
+    k = bank_details.id
+
+    mni = Branches.query.filter_by(city=city).filter_by(bank_id=k).all()
+
+    if not mni:
+        return jsonify({'messeges':'Bank Not Found'})            
+    
+    output=[]
+    for mno in mni:
+        dic = {}
+        dic['name'] = name
+        dic['district'] = mno.district
+        dic['state'] = mno.state
+        dic['branch'] = mno.branch
+        dic['address'] = mno.address
+        dic['ifsc'] = mno.ifsc
+        output.append(dic)
+        
+    #return str(len(mni))
+    return jsonify({'result':output})    
+
+
 
 
 if __name__ == "__main__":
