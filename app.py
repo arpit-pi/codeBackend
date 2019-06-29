@@ -59,6 +59,10 @@ def token_required(f):
 
     return decorated
 
+@app.route('/',methods=['GET'])
+def hello():
+    return jsonify({'message' : 'Hello World'})
+
 
 '''Manipulating the users'''
 @app.route('/user',methods=['POST'])
