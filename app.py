@@ -8,7 +8,7 @@ from functools import wraps
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://arpitsangotra:@localhost:5432/bank'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://fqsigvjjwyrymm:56b664bef1a940cdfb9cfffb031048a9f512b0c9b7673077b57f8013780d5e0f@ec2-54-221-215-228.compute-1.amazonaws.com:5432/d6i8o7o5qiqki5'
 db = SQLAlchemy(app)
 
 class Banks(db.Model):
@@ -49,7 +49,7 @@ def token_required(f):
         if not token:
             return jsonify({'message' : 'Token is missing!'}), 401
 
-        try: 
+        try:
             data = jwt.decode(token, str(app.config['SECRET_KEY']))
             current_user = User_db.query.filter_by(public_id=data['public_id']).first()
         except:
@@ -107,7 +107,7 @@ def get_all_users():
         user_data['password'] = user.password
         user_data['admin'] = user.admin
         output.append(user_data)
-    return jsonify({'users' : output}) 
+    return jsonify({'users' : output})
 
 @app.route('/user/<public_id>',methods=['GET'])
 def get_one_user(public_id):
@@ -153,7 +153,7 @@ def branches(current_user):
         output={}
         output['ifsc'] = branch_info.ifsc
         a.append(output)
-    return jsonify({'result':a})  
+    return jsonify({'result':a})
 
 @app.route('/bank/<ifsc>',methods=['GET'])
 @token_required
@@ -171,7 +171,7 @@ def get_bank_details(current_user,ifsc):
 
     bank_name = Banks.query.filter_by(id=k).first()
     output['name'] = bank_name.name
-    return jsonify({'result':output}) 
+    return jsonify({'result':output})
 
 @app.route('/bank/<name>/<city>/<int:limit>/<int:offset>',methods=['GET'])
 @token_required
@@ -184,8 +184,8 @@ def get_branch_details(current_user,name,city,limit,offset):
     mni = Branches.query.filter_by(city=city).filter_by(bank_id=k).offset(offset).limit(limit).all()
 
     if not mni:
-        return jsonify({'messeges':'Bank Not Found'})            
-    
+        return jsonify({'messeges':'Bank Not Found'})
+
     output=[]
     for mno in mni:
         dic = {}
@@ -196,7 +196,7 @@ def get_branch_details(current_user,name,city,limit,offset):
         dic['address'] = mno.address
         dic['ifsc'] = mno.ifsc
         output.append(dic)
-        
+
     #return str(len(mni))
     return jsonify({'result':output})
 
@@ -211,8 +211,8 @@ def get_branch_details_wolo(current_user,name,city):
     mni = Branches.query.filter_by(city=city).filter_by(bank_id=k).all()
 
     if not mni:
-        return jsonify({'messeges':'Bank Not Found'})            
-    
+        return jsonify({'messeges':'Bank Not Found'})
+
     output=[]
     for mno in mni:
         dic = {}
@@ -223,9 +223,9 @@ def get_branch_details_wolo(current_user,name,city):
         dic['address'] = mno.address
         dic['ifsc'] = mno.ifsc
         output.append(dic)
-        
+
     #return str(len(mni))
-    return jsonify({'result':output})    
+    return jsonify({'result':output})
 
 
 
