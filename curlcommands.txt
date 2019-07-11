@@ -1,14 +1,14 @@
 for root page:
-curl -X GET http://87aef285.ngrok.io/
+curl -X GET http://66a734e7.ngrok.io/
 
 for getting the x-acess-token(JWT):
-curl -X GET http://87aef285.ngrok.io/login -H 'authorization: Basic YWRtaW46MTIzNDU=' -d '{"name":"admin","password":"12345"}'
+curl -X GET http://66a734e7.ngrok.io/login -H 'authorization: Basic YWRtaW46MTIzNDU=' -d '{"name":"admin","password":"12345"}'
 
 for bank details with IFSC :
-curl -X GET http://87aef285.ngrok.io/bank/ABHY0065002 -H 'x-access-token: *insert token here*'
+curl -X GET http://66a734e7.ngrok.io/bank/ABHY0065002 -H 'x-access-token: *insert token here*'
 
 for bank details with name w/o limit and offset params:
-curl -X GET http://87aef285.ngrok.io/bank/ALLAHABAD%20BANK/ALIGARH -H 'x-access-token: *insert token here*'
+curl -X GET http://66a734e7.ngrok.io/bank/ALLAHABAD%20BANK/ALIGARH -H 'x-access-token: *insert token here*'
 
 for bank details with name with limit and offset params:(first one is limit and second offset)
-curl -X GET http://87aef285.ngrok.io/bank/ALLAHABAD%20BANK/ALIGARH/5/2 -H 'x-access-token: *insert token here*'
+curl -X GET http://66a734e7.ngrok.io/bank/ALLAHABAD%20BANK/ALIGARH/5/2 -H 'x-access-token: *insert token here*'
