@@ -5,10 +5,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
+import os
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://fqsigvjjwyrymm:56b664bef1a940cdfb9cfffb031048a9f512b0c9b7673077b57f8013780d5e0f@ec2-54-221-215-228.compute-1.amazonaws.com:5432/d6i8o7o5qiqki5'
+uri = os.environ.get('DATABASE_URI', None)
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
 db = SQLAlchemy(app)
 
 class Banks(db.Model):
