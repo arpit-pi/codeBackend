@@ -126,7 +126,7 @@ def get_one_user(public_id):
     return jsonify({'user' : user_data})
 
 '''JWT TOKEN'''
-@app.route('/login')
+@app.route('/login',methods = ['POST'])
 def login():
     auth = request.authorization
 
