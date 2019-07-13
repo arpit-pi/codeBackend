@@ -2,13 +2,13 @@ for root page:
 curl -X GET https://secret-headland-55348.herokuapp.com/
 
 for getting the x-acess-token(JWT):
-curl -X GET https://secret-headland-55348.herokuapp.com/login -H 'authorization: Basic YWRtaW46MTIzNDU=' -d '{"name":"admin","password":"12345"}'
+curl -X POST https://secret-headland-55348.herokuapp.com/login -H 'authorization: Basic YWRtaW46MTIzNDU=' -d '{"name":"admin","password":"12345"}'
 
 for bank details with IFSC :
-curl -X GET https://secret-headland-55348.herokuapp.com/bank/ABHY0065002 -H 'x-access-token: *insert token here*'
+curl -X GET https://secret-headland-55348.herokuapp.com/bank?ifsc=ABHY0065002 -H 'x-access-token: *insert token here*'
 
-for bank details with name w/o limit and offset params:
-curl -X GET https://secret-headland-55348.herokuapp.com/bank/ALLAHABAD%20BANK/ALIGARH -H 'x-access-token: *insert token here*'
+for bank details with name with default limit and offset params:
+curl -X GET https://secret-headland-55348.herokuapp.com/banks?name=ALLAHABAD%20BANK&city=ALIGARH -H 'x-access-token: *insert token here*'
 
-for bank details with name with limit and offset params:(first one is limit and second offset)
-curl -X GET https://secret-headland-55348.herokuapp.com/bank/ALLAHABAD%20BANK/ALIGARH/5/2 -H 'x-access-token: *insert token here*'
+for bank details with name with limit and offset params:(any one or both limit and offset can be used)
+curl -X GET https://secret-headland-55348.herokuapp.com/banks?name=ALLAHABAD%20BANK&city=ALIGARH&limit=5&offset=2 -H 'x-access-token: *insert token here*'
