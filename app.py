@@ -148,18 +148,10 @@ def login():
 '''Main Functionality'''
 @app.route('/bank',methods=['GET'])
 @token_required
-def branches(current_user):
-    branch_inf = Branches.query.all()
-    a=[]
-    for branch_info in branch_inf:
-        output={}
-        output['ifsc'] = branch_info.ifsc
-        a.append(output)
-    return jsonify({'result':a})
-
-@app.route('/bank/<ifsc>',methods=['GET'])
-@token_required
-def get_bank_details(current_user,ifsc):
+def get_bank_details(current_user,ifsc=''):
+    ifsc = request.args.get('ifsc',ifsc)
+    if not ifsc:
+        return jsonify({'Error':'Ifsc code missing'})
     branch_info = Branches.query.filter_by(ifsc=ifsc).first()
     if not branch_info:
         return jsonify({'messege':'Bank Not Found'})
@@ -175,42 +167,22 @@ def get_bank_details(current_user,ifsc):
     output['name'] = bank_name.name
     return jsonify({'result':output})
 
-@app.route('/bank/<name>/<city>/<int:limit>/<int:offset>',methods=['GET'])
+@app.route('/banks',methods=['GET'])
 @token_required
-def get_branch_details(current_user,name,city,limit,offset):
+def get_branch_details(current_user,name='',city='',limit=1000,offset=0):
+    #/<name>/<city>/<int:limit>/<int:offset>
+    name = request.args.get('name',name)
+    city = request.args.get('city',city)
+    limit = int(request.args.get('limit',limit))
+    offset = int(request.args.get('offset',offset))
+    if not name or not city:
+        return jsonify({'result':'name or city missing'})
     bank_details = Banks.query.filter_by(name=name).first()
     if not bank_details:
         return jsonify({'messege':'Bank Not Found'})  #all names are unique
     k = bank_details.id
 
     mni = Branches.query.filter_by(city=city).filter_by(bank_id=k).offset(offset).limit(limit).all()
-
-    if not mni:
-        return jsonify({'messeges':'Bank Not Found'})
-
-    output=[]
-    for mno in mni:
-        dic = {}
-        dic['name'] = name
-        dic['district'] = mno.district
-        dic['state'] = mno.state
-        dic['branch'] = mno.branch
-        dic['address'] = mno.address
-        dic['ifsc'] = mno.ifsc
-        output.append(dic)
-
-    #return str(len(mni))
-    return jsonify({'result':output})
-
-@app.route('/bank/<name>/<city>',methods=['GET'])
-@token_required
-def get_branch_details_wolo(current_user,name,city):
-    bank_details = Banks.query.filter_by(name=name).first()
-    if not bank_details:
-        return jsonify({'messege':'Bank Not Found'})  #all names are unique
-    k = bank_details.id
-
-    mni = Branches.query.filter_by(city=city).filter_by(bank_id=k).all()
 
     if not mni:
         return jsonify({'messeges':'Bank Not Found'})
